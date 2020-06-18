@@ -6,6 +6,9 @@ import jsonServer from '../api/jsonServer';
 const blogReducer = (state, action) => {
     // Depending on what type action has, we'll do a certain operation
     switch (action.type) {
+        case 'get_blogposts':
+            // This returns the array from the API 
+            return action.payload;
         case 'edit_blogpost':
             // Map through all of the blog posts 
             return state.map(blogPost => {
@@ -43,12 +46,33 @@ const blogReducer = (state, action) => {
 };
 
 // Actions
+
+const getBlogPosts = dispatch => {
+    return async () => {
+        // any address we put inside of this get
+        // will be concatenated with the base URL 
+        const response = await jsonServer.get('blogposts');
+        // response.data === [{}, {}, {}]
+
+        // after getting the response...
+        // remember that dispatch takes the object, 
+        //      automatically calls the reducer, and makes the object 
+        //      the second argument for the reducer. 
+        dispatch ({type: 'get_blogposts', payload: response.data });
+    };
+};
+
 // This needs to access to the dispatch function to change our state
 // Creates a blog post 
 const addBlogPost = (dispatch) => {
     return async (title, content, callback) => {
+        // Anytime we want to make a record on our backend server
+        // Second argument is the data we want to add to the server
+        // We put this data inside of an object {} 
+        await jsonServer.post('/blogposts', {title, content});
+
             // dispatch is defined inside of createDataContext
-            dispatch({ type: 'add_blogpost', payload: {title, content}});
+            //dispatch({ type: 'add_blogpost', payload: {title, content}});
             if (callback) {
                 callback();
             }
@@ -57,14 +81,18 @@ const addBlogPost = (dispatch) => {
 
 // Deletes a blog post
 const deleteBlogPost = dispatch => {
-    return (id) => {
+    return async (id) => {
+        // String catenation
+        await jsonServer.delete(`/blog/posts/${id}`);
         dispatch({ type: 'delete_blogpost', payload: id})
     };
-}
+};
 
 // Edits a blog post 
 const editBlogPost = dispatch => {
-    return (id, title, content, callback) => {
+    return async (id, title, content, callback) => {
+        await jsonServer.put(`/blogposts/${id}`, {title, content });
+        
         dispatch({ 
             type: 'edit_blogpost', 
             payload: { id, title, content}
@@ -84,7 +112,7 @@ export const {Context, Provider} = createDataContext(
     blogReducer, 
     // Remember that {} always means an object 
     // This is an object with different actions 
-    {addBlogPost, deleteBlogPost, editBlogPost},
-    // Default state 
+    {addBlogPost, deleteBlogPost, editBlogPost, getBlogPosts},
+    // Default state, no blog posts 
     []
     );
