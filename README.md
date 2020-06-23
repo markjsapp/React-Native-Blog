@@ -1,5 +1,5 @@
 # React-Native-Blog
-![video preview](https://gfycat.com/femaleacceptablefinwhale.gif)
+![video preview](https://thumbs.gfycat.com/femaleacceptablefinwhale-size_restricted.gif)
 
 ![server image](assets/jsonserver.png)
 
