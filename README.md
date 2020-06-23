@@ -1,6 +1,7 @@
 # React-Native-Blog
-![video preview](https://gfycat.com/femaleacceptablefinwhale-size_restricted.gif)
-![server image]()
+![video preview](https://gfycat.com/femaleacceptablefinwhale.gif)
+
+![server image](assets/jsonserver.png)
 
 ## About 
 This is a mobile application that allows users to create and edit blog entries. In this app I wrote: GET, POST, and PUT functions to call to a custom API. I also utilized standard library functions that include: Callbacks, useReducer, and Context.
